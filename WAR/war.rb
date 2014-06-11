@@ -49,7 +49,8 @@ class Deck
 
   # Given a card, insert it on the bottom your deck
   def add_card(card)
-    @ph << card
+    @deck << card
+    # @ph << card
   end
 
 #REVIEW
@@ -70,12 +71,6 @@ class Deck
     return card
   end
 
-  def swap_decks
-    @deck = @ph
-    @current_index = 0
-    @ph = []
-  end
-
   # Reset this deck with 52 cards
   def create_52_card_deck
     Deck.suits.each do |suit|
@@ -88,7 +83,9 @@ class Deck
 
   def check_array
     if @deck[@current_index] == nil
-      Deck.swap_decks
+      @deck = @ph
+      @current_index = 0
+      @ph = []
     end
   end
 
@@ -98,12 +95,14 @@ class Deck
 end
 
 class Player
+  attr_reader :name
+  attr_accessor :hand
   def initialize(name)
     @name = name
     @hand = Deck.new
   end
   def give_card(card)
-    @hand.add_card
+    @hand.add_card(card)
   end
   def has_cards?
     if @hand.empty? == true
@@ -136,9 +135,9 @@ class War
 
   def pass_cards
     while !@main_deck.empty?
-      card1 = @main.deck.remove_card
+      card1 = @main_deck.remove_card
       @player1.give_card(card1)
-      card2 = @main.deck.remove_card
+      card2 = @main_deck.remove_card
       @player2.give_card(card2)
     end
     return "ready to play"

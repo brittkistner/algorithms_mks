@@ -13,71 +13,97 @@ describe Card do
 end
 
 describe Deck do
-  it 'initializes an empty deck' do
-    new_deck = Deck.new
-    expect(new_deck.deck).to eq([])
-  end
-
-  it 'checks the suits in the deck' do
-    expect(Deck.suits).to eq([:spades, :diamonds, :clubs, :hearts])
-  end
-
-  it 'checks the values in the deck' do
-    expect(Deck.values).to eq([2,3,4,5,6,7,8,9,10,11,12,13,14])
-  end
-
-  it 'adds 52 cards to the deck' do
-    deck1 = Deck.new
-    deck1.create_52_card_deck
-    expect(deck1.deck.length).to eq(52)
-
-    deck1.create_52_card_deck
-    expect(deck1.deck.length).to eq(104)
-  end
-
-  it 'removes a card from the deck' do
-    deck1 = Deck.new
-    deck1.create_52_card_deck
-    expect(deck1.current_index).to eq(0)
-    deck1.remove_card
-    expect(deck1.current_index).to eq(1)
-  end
-
-  it 'checks if a card object is returned when remove card is called' do
-    deck1 = Deck.new
-    deck1.create_52_card_deck
-    expect(deck1.remove_card).to be_a(Card)
-  end
-
-  it 'checks if the current index has switched to the placeholder deck and current index is 0' do
-    deck1 = Deck.new
-    deck1.create_52_card_deck
-    expect(deck1.current_index).to eq(0)
-    52.times do
-      deck1.remove_card
+  describe 'initializes' do
+    it 'empty deck' do
+      new_deck = Deck.new
+      expect(new_deck.deck).to eq([])
     end
-    expect(deck1.current_index).to eq(0)
   end
 
-  it 'shuffles cards' do
-    deck1 = Deck.new
-    deck1.create_52_card_deck
-    deck1.shuffle
-    expect(deck1.deck.size).to eq(52)
+  describe 'initializes'do
+    it 'adds suits' do
+      expect(Deck.suits).to eq([:spades, :diamonds, :clubs, :hearts])
+    end
+  end
+  describe 'initializes'do
+    it 'adds values' do
+      expect(Deck.values).to eq([2,3,4,5,6,7,8,9,10,11,12,13,14])
+    end
+  end
+  describe 'create_52_card_deck' do
+    it 'adds 52 cards to the deck' do
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      expect(deck1.deck.length).to eq(52)
+
+      deck1.create_52_card_deck
+      expect(deck1.deck.length).to eq(104)
+    end
+  end
+  describe 'remove_card' do
+    it 'removes a card from the deck' do
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      expect(deck1.current_index).to eq(0)
+      deck1.remove_card
+      expect(deck1.current_index).to eq(1)
+    end
+  end
+  describe 'remove_card' do
+    it 'checks if a card object is returned' do
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      expect(deck1.remove_card).to be_a(Card)
+    end
+  end
+
+  context 'switches to the placeholder deck' do
+    it 'checks if the index is zero' do
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      expect(deck1.current_index).to eq(0)
+      52.times do
+        deck1.remove_card
+      end
+      expect(deck1.current_index).to eq(0)
+    end
+  end
+  describe 'shuffle' do
+    it 'returns a deck of the original size' do
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      deck1.shuffle
+      expect(deck1.deck.size).to eq(52)
+    end
   end
 end
 
 describe War do
-  describe "initializes"
+  describe "initializes" do
     it "War with two players and a full main deck" do
       new_game = War.new("sky", "fawn")
-      expect(new_game.player1).to eq("sky")
-      expect(new_game.player2).to eq("fawn")
+      expect(new_game.player1.name).to eq("sky")
+      expect(new_game.player2.name).to eq("fawn")
     end
-  describe 'initializes'
+  end
+  describe 'initializes' do
     it "with 26 cards in each player's deck" do
-      expect(player1.hand.count).to eq(26)
-      expect(player2.hand.count).to eq(26)
+      new_game = War.new("sky", "fawn")
+      expect(new_game.player1.hand.deck.count).to eq(26)
+      expect(new_game.player2.hand.deck.count).to eq(26)
+    end
+  end
+  describe 'initializes' do
+    it "passes out all cards and ready to play game" do
+      new_game = War.new("sky", "fawn")
+      expect(new_game.pass_cards).to eq("ready to play")
+    end
+  end
+  context 'Once a game is player' do
+    xit "returns the winner of the game" do
+      new_game = War.new("sky", "fawn")
+      # check whether player1 or player2 has an empty array, then return the player with the non empty array
+      expect(War.play_game).to eq("?")
     end
   end
 end
