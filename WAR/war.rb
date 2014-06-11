@@ -37,7 +37,7 @@ class Deck
   end
 
   attr_accessor :deck, :current_index
-  attr_reader :placeholder
+  attr_reader :ph
 
   def initialize
     @deck = [] # Determine the best way to hold the cards
@@ -76,7 +76,6 @@ class Deck
     end
   end
 
-
   def check_array
     if @deck[@current_index] == nil
       @deck = @ph
@@ -87,6 +86,10 @@ class Deck
 
   def empty?
     @deck.count {|x| x!=nil} == 0
+  end
+
+  def count_deck
+    @deck.count {|x| x!=nil}
   end
 end
 
