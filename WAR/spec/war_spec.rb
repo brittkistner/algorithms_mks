@@ -41,6 +41,7 @@ describe Deck do
     end
   end
   describe 'remove_card' do
+
     it 'removes a card from the deck' do
       deck1 = Deck.new
       deck1.create_52_card_deck
@@ -48,8 +49,7 @@ describe Deck do
       deck1.remove_card
       expect(deck1.current_index).to eq(1)
     end
-  end
-  describe 'remove_card' do
+
     it 'checks if a card object is returned' do
       deck1 = Deck.new
       deck1.create_52_card_deck
@@ -85,25 +85,32 @@ describe War do
       expect(new_game.player1.name).to eq("sky")
       expect(new_game.player2.name).to eq("fawn")
     end
-  end
-  describe 'initializes' do
+
     it "with 26 cards in each player's deck" do
       new_game = War.new("sky", "fawn")
-      expect(new_game.player1.hand.deck.count).to eq(26)
+      expect(new_game.player1.hand.count_card).to eq(26)
       expect(new_game.player2.hand.deck.count).to eq(26)
     end
-  end
-  describe 'initializes' do
+
+  describe "pass_cards" do
     it "passes out all cards and ready to play game" do
       new_game = War.new("sky", "fawn")
       expect(new_game.pass_cards).to eq("ready to play")
     end
   end
-  context 'Once a game is player' do
-    xit "returns the winner of the game" do
+
+  describe "play_game" do
+    it "the winner will have 52 cards and the loser will have 0 cards" do
       new_game = War.new("sky", "fawn")
-      # check whether player1 or player2 has an empty array, then return the player with the non empty array
-      expect(War.play_game).to eq("?")
+      new_game.play_game
+      # expect(winner).to be_a(Person)
+      if new_game.player1.hand.empty?
+        expect(new_game.player2.hand.deck.count).to eq(52)
+        expect(new_game.player1.hand.deck.count).to eq(0)
+      else
+        expect(new_game.player1.hand.deck.count).to eq(52)
+        expect(new_game.player2.hand.deck.count).to eq(0)
+      end
     end
   end
 end

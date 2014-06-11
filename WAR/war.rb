@@ -6,29 +6,27 @@ class Card
 
   attr_reader :value, :suit, :rank
   def initialize(value, suit) #consider adding the rank back in
-    # @rank = rank
     @value = value
     @suit = suit
     @rank = make_rank(value)
   end
 
   def make_rank(value)
-  case value
-    when 11
-      return :J
-    when 12
-      return :Q
-    when 13
-      return :K
-    when 14
-      return :A
-    else
-      return nil
+    case value
+      when 11
+        return :J
+      when 12
+        return :Q
+      when 13
+        return :K
+      when 14
+        return :A
+      else
+        return value
     end
   end
 end
 
-# TODO: You will need to complete the methods in this class
 class Deck
   def self.suits
     [:spades, :diamonds, :clubs, :hearts]
@@ -49,11 +47,9 @@ class Deck
 
   # Given a card, insert it on the bottom your deck
   def add_card(card)
-    @deck << card
-    # @ph << card
+    @ph << card
   end
 
-#REVIEW
   # Mix around the order of the cards in your deck
   def shuffle # You can't use .shuffle!
     @deck.size.times do |i|
@@ -102,19 +98,15 @@ class Player
     @hand = Deck.new
   end
   def give_card(card)
-    @hand.add_card(card)
+    @hand.deck << card
   end
   def has_cards?
-    if @hand.empty? == true
-      false
-    else
-      true
-    end
+    !@hand.empty?
   end
 
-  def play_card
-    @deck.remove_card
-  end
+  # def play_card
+  #   @hand.remove_card
+  # end
 end
 
 
@@ -140,19 +132,27 @@ class War
       card2 = @main_deck.remove_card
       @player2.give_card(card2)
     end
-    return "ready to play"
   end
 
   def play_game
     while @player1.has_cards? && @player2.has_cards?
-      card1 = @player1.play_card
-      card2 = @player2.play_card
-      WarAPI.play_turn(@player1, card1, @player2, card2)
+      card1 = @player1.hand.remove_card #play_card
+      card2 = @player2.hand.remove_card
+      result = WarAPI.play_turn(@player1, card1, @player2, card2)
+      result[@player1].each { |c| @player1.hand.add_card(c) }
+      result[@player2].each { |c| @player2.hand.add_card(c) }
+      # if hash[@player1].length == 2  Use @ because a player object was passed through
+      #   hand.add_card(hash[@player1][0])
+      #   hand.add_card(hash[@player1][1])
+      # else
+      #   hand.add_card(hash[@player1][0])
+      #   hand.add_card(hash[@player1][1])
+      # end
     end
     if @player1.hand.empty?
-      return @player2
+      return "#{@player2.name} is the winner!"
     else
-      return @player1
+      return "#{@player1.name} is the winner!"
     end
   end
 end
@@ -166,7 +166,7 @@ class WarAPI
       {player1 => [card1, card2], player2 => []}
     elsif card2.value > card1.value
       {player1 => [], player2 => [card2, card1]}
-    elsif Rand(100).even?
+    elsif rand(100).even?
       {player1 => [], player2 => [card2, card1]}
     else
       {player1 => [card1, card2], player2 => []}
