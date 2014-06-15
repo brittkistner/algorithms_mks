@@ -1,4 +1,3 @@
-#write tests - figure out git
 require 'rubygems'
 require 'rspec'
 require 'pry-debugger'
@@ -12,40 +11,70 @@ describe "Linked_List" do
   describe '#initialize' do
     it 'instantiates a linked list with a nil first_node and last_node' do
       list1 = Linked_List.new
-      expect(Linked_List.first_node).to eq(nil)
-      expect(Linked_List.last_node).to eq(nil)
+      expect(list1.first_node).to eq(nil)
+      expect(list1.last_node).to eq(nil)
+      expect(list1.count).to eq(0)
     end
   end
 
   describe '#add_last' do
-    it 'adds a new node to the end of the list' do
-      list1 = Linked_List.new
-      Linked_List.add_last(1)
-      expect(Linked_List.last_node).to eq(nil)
-
+    before do
+      @list1 = Linked_List.new
     end
+    it 'adds a new node to an empty list' do
+      # list1 = Linked_List.new
+      expect(@list1.count).to eq(0)
 
-    it "adds a new node to the end of the list when theres no other node" do
-      list1 = Linked_List.new
+      expect(@list1.add_last(1)).to eq(true)
 
+      expect(@list1.last_node.value).to eq(1)
+      expect(@list1.count).to eq(1)
+    end
+    it 'adds a new node to the end of a list with other nodes' do
+      @list1.add_last(1)
+      @list1.add_last(2)
+
+      expect(@list1.count).to eq(2)
+      expect(@list1.first_node.value).to eq(1)
+      expect(@list1.last_node.value). to eq(2)
     end
   end
 
   describe '#remove_first' do
+    before do
+      @list1 = Linked_List.new
+    end
     it "checks whether there is a first_node to remove" do
-      list1 = Linked_List.new
-
+      # list1 = Linked_List.new
+      expect(@list1.remove_first).to eq(nil)
     end
 
     it "removes the first_node from the list" do
-      list1 = Linked_List.new
+      # list1 = Linked_List.new
+      @list1.add_last(1)
+      @list1.add_last(2)
+      expect(@list1.count).to eq(2)
 
+      @list1.remove_first
+      expect(@list1.count).to eq(1)
+
+      expect(@list1.first_node.value).to eq(2)
     end
   end
-  describe '#swap' do
-    it "swaps the first_node with the next_node" do
-      list1 = Linked_List.new
 
+  describe '#swap' do
+    xit "swaps the first_node with the next_node" do
+      list1 = Linked_List.new
+      list1.add_last(1)
+      list1.add_last(2)
+      expect(list1.count).to eq(2)
+      expect(list1.first_node.value).to eq(1)
+
+      # binding.pry
+
+      expect(list1.swap).to eq(true)
+      # expect(list1.count).to eq(2)
+      # expect(list1.first_node.value).to eq(2)
     end
   end
 end
@@ -56,10 +85,21 @@ describe "Linked_List::Node" do
   end
 
   describe '#initialize' do
+    before do
+      @node1 = Linked_List::Node.new(1,nil)
+    end
     it 'initializes a node with a value and a pointer to next_node' do
-      node1 = Linked_List::Node.new(1,nil)
-      expect(node1.value).to eq(1)
-      expect(node1.value).to eq(nil)
+      # node1 = Linked_List::Node.new(1,nil)
+      expect(@node1.value).to eq(1)
+      expect(@node1.next_node).to eq(nil)
+    end
+    it 'can point to the next_node' do
+      # node1 = Linked_List::Node.new(1,nil)
+      node2 = Linked_List::Node.new(2, nil)
+
+      @node1.next_node = node2
+
+      expect(@node1.next_node).to eq(node2)
     end
   end
 end

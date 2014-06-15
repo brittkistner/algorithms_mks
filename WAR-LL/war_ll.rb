@@ -4,7 +4,7 @@ class Card
   # Suit is the suit of the card, Spades, Diamonds, Clubs or Hearts
 
   attr_reader :value, :suit, :rank
-  def initialize(value, suit) #consider adding the rank back in
+  def initialize(value, suit)
     @value = value
     @suit = suit
     @rank = make_rank(value)
@@ -29,40 +29,12 @@ end
 class Deck
 
   def initialize
+    #call the linked list to start adding cards and create 52 card deck
+    #initialize with 52 cards and diff method deal from the top
+    #add cards to the diff method botoom
+    #add swap method
 
-  end
-
-  def self.suits
-    [:spades, :diamonds, :clubs, :hearts]
-  end
-
-  def self.values
-    [2,3,4,5,6,7,8,9,10,11,12,13,14]
-  end
-
-  # Given a card,insert it on the bottom your deck
-  def add_card(card) #add new node
-    @ph << card
-  end
-
-  # Remove the top card from your deck and return it
-  def set_up_deck #REWORK
-    card = @deck[@current_index]  #the first time around, this would be @deck[0]
-    @deck[@current_index] = nil #now the first element is nil
-    @current_index += 1 #increment the index by 1
-    check_array #Broken
-    card
-  end
-
-  def remove_card
-    card = @deck[@current_index]
-    @deck[@current_index] = nil
-    @current_index += 1
-    card
-  end
-
-  # Reset this deck with 52 cards
-  def create_52_card_deck #create loop for nodes - assign values?
+    def create_52_card_deck #create loop for nodes - assign values?
     Deck.suits.each do |suit|
       Deck.values.each do |value|
         @deck << Card.new(value, suit)
@@ -70,17 +42,33 @@ class Deck
     end
   end
 
+  end
+
+  # def self.suits
+  #   [:spades, :diamonds, :clubs, :hearts]
+  # end
+
+  # def self.values
+  #   [2,3,4,5,6,7,8,9,10,11,12,13,14]
+  # end
+
+  # Given a card,insert it on the bottom your deck
+  def add_card(card)
+    @ph << card
+  end
+
+  # Remove the top card from your deck and return it
+  def remove_card #remove linkedlist method
+    card = @deck[@current_index]
+    @deck[@current_index] = nil
+    @current_index += 1
+    card
+  end
+
+
   # Mix around the order of the cards in your deck
   def shuffle # You can't use .shuffle!
 
-  end
-
-  def check_array
-    if @deck[@current_index] == nil
-      @deck = @ph
-      @current_index = 0
-      @ph = []
-    end
   end
 
   def count_deck
@@ -105,11 +93,11 @@ class Player
 
   #naming? its a little confusing what give_card means without reading the rest of the code
   def give_card(card)
-    @hand.deck << card
+    # @hand.deck << card
   end
 
   def has_cards?
-    !@hand.empty?
+    # !@hand.empty?
   end
 
   # def play_card
@@ -123,8 +111,7 @@ class War
   attr_accessor :player1, :player2, :main_deck
 
   def initialize(player1, player2)
-    @main_deck = Deck.new
-    @main_deck.create_52_card_deck
+    @main_deck = Deck.new #will already be initialized with 52 card deck
     @main_deck.shuffle
 
     @player1 = Player.new(player1)
@@ -144,23 +131,11 @@ class War
 
   def play_game
     while @player1.has_cards? && @player2.has_cards?
-      # if @player1.hand.deck.count != 26 || @player2.hand.deck.count != 26
-      #   binding.pry
-      # end
-      #turns = 0
-
       card1 = @player1.hand.remove_card #play_card
       card2 = @player2.hand.remove_card
       result = WarAPI.play_turn(@player1, card1, @player2, card2)
       result[@player1].each { |c| @player1.hand.add_card(c) }
       result[@player2].each { |c| @player2.hand.add_card(c) }
-      # if hash[@player1].length == 2  Use @ because a player object was passed through
-      #   hand.add_card(hash[@player1][0])
-      #   hand.add_card(hash[@player1][1])
-      # else
-      #   hand.add_card(hash[@player1][0])
-      #   hand.add_card(hash[@player1][1])
-      # end
     end
 
     if @player1.hand.empty?
