@@ -1,4 +1,3 @@
-# This class is complete. You do not need to alter this
 class Card
   # Rank is the rank of the card, 2-10, J, Q, K, A
   # Value is the numeric value of the card, so J = 11, A = 14
@@ -28,13 +27,9 @@ class Card
 end
 
 class Deck
-  attr_accessor :deck, :current_index
-  attr_reader :ph
 
   def initialize
-    @deck = [] # Determine the best way to hold the cards
-    @ph = [] #ph = placeholder array
-    @current_index = 0
+
   end
 
   def self.suits
@@ -45,8 +40,8 @@ class Deck
     [2,3,4,5,6,7,8,9,10,11,12,13,14]
   end
 
-  # Given a card, insert it on the bottom your deck
-  def add_card(card)
+  # Given a card,insert it on the bottom your deck
+  def add_card(card) #add new node
     @ph << card
   end
 
@@ -67,7 +62,7 @@ class Deck
   end
 
   # Reset this deck with 52 cards
-  def create_52_card_deck
+  def create_52_card_deck #create loop for nodes - assign values?
     Deck.suits.each do |suit|
       Deck.values.each do |value|
         @deck << Card.new(value, suit)
@@ -77,10 +72,7 @@ class Deck
 
   # Mix around the order of the cards in your deck
   def shuffle # You can't use .shuffle!
-    @deck.size.times do |i|
-      j = rand(deck.size)
-      @deck[i], @deck[j] = @deck[j], @deck[i]
-    end
+
   end
 
   def check_array

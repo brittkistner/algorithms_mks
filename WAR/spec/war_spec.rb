@@ -3,24 +3,26 @@ require 'rspec'
 require 'pry-debugger'
 require_relative '../war.rb'
 
+# add let statement before each
+
 describe Card do
-  it 'checks the value, suit and rank of a card' do
-    card = Card.new(11, :diamonds)
-    expect(card.value).to eq(11)
-    expect(card.suit).to eq(:diamonds)
-    expect(card.rank).to eq(:J)
+  describe '#initialize' do
+    it 'checks the value, suit and rank of a card' do
+      card = Card.new(11, :diamonds)
+      expect(card.value).to eq(11)
+      expect(card.suit).to eq(:diamonds)
+      expect(card.rank).to eq(:J)
+    end
   end
 end
 
 describe Deck do
-  describe 'initializes' do
-    it 'empty deck' do
+  describe '#initialize' do
+    it 'empty deck' do #WHAT??
       new_deck = Deck.new
       expect(new_deck.deck).to eq([])
     end
-  end
-
-  describe 'initializes'do
+  # check ph and index
     it 'adds suits' do
       expect(Deck.suits).to eq([:spades, :diamonds, :clubs, :hearts])
     end
@@ -28,7 +30,7 @@ describe Deck do
       expect(Deck.values).to eq([2,3,4,5,6,7,8,9,10,11,12,13,14])
     end
   end
-  describe 'create_52_card_deck' do
+  describe '#create_52_card_deck' do
     it 'adds 52 cards to the deck' do
       deck1 = Deck.new
       deck1.create_52_card_deck
@@ -49,8 +51,8 @@ describe Deck do
       expect(deck1.deck.length).to eq(0)
       deck1.add_card(3)
       expect(deck1.ph.length).to eq(1) #can't include both add and remove, since add cards go to ph
-      # deck1.remove_card
-      # expect(deck1.count_deck).to eq(0)
+      deck1.remove_card
+      expect(deck1.count_deck).to eq(nil)
     end
   end
   describe 'remove_card' do
@@ -69,7 +71,7 @@ describe Deck do
       deck1.create_52_card_deck
       expect(deck1.current_index).to eq(0)
       52.times do
-        deck1.remove_card
+        deck1.set_up_deck
       end
       expect(deck1.current_index).to eq(0)
     end
@@ -86,7 +88,7 @@ describe Deck do
 end
 
 describe War do
-  describe "initializes" do
+  describe "#initialize" do
     it "War with two players" do
       new_game = War.new("sky", "fawn")
       expect(new_game.player1.name).to eq("sky")
@@ -112,7 +114,10 @@ describe War do
     xit "the winner will have 52 cards and the loser will have 0 cards" do
       new_game = War.new("sky", "fawn")
       new_game.play_game
+      # binding.pry
       # expect(winner).to be_a(Person)
+      #expect res to equal fixnum
+      # check for nil
       if new_game.player1.hand.empty?
         expect(new_game.player2.hand.ph.count).to eq(52)
         expect(new_game.player1.hand.count_deck).to eq(0)
