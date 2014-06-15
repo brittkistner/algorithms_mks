@@ -1,4 +1,3 @@
-# This class is complete. You do not need to alter this
 class Card
   # Rank is the rank of the card, 2-10, J, Q, K, A
   # Value is the numeric value of the card, so J = 11, A = 14
@@ -32,8 +31,8 @@ class Deck
   attr_reader :ph
 
   def initialize
-    @deck = [] # Determine the best way to hold the cards
-    @ph = [] #ph = placeholder array
+    @deck = []
+    @ph = []
     @current_index = 0
   end
 
@@ -45,25 +44,33 @@ class Deck
     [2,3,4,5,6,7,8,9,10,11,12,13,14]
   end
 
+  def set_up_deck
+    card = @deck[@current_index]  #the first time around, this would be @deck[0]
+    @deck[@current_index] = nil #now the first element is nil
+    @current_index += 1 #increment the index by 1
+    card
+  end
+
   # Given a card, insert it on the bottom your deck
   def add_card(card)
     @ph << card
   end
 
   # Remove the top card from your deck and return it
-  # def set_up_deck
-  #   card = @deck[@current_index]  #the first time around, this would be @deck[0]
-  #   @deck[@current_index] = nil #now the first element is nil
-  #   @current_index += 1 #increment the index by 1
-  #   check_array #Broken
-  #   card
-  # end
-
   def remove_card
     card = @deck[@current_index]
     @deck[@current_index] = nil
     @current_index += 1
+    check_array #when to switch to ph deck
     card
+  end
+
+  def check_array
+    if @deck[@current_index] == nil
+      @deck = @ph
+      @current_index = 0
+      @ph = []
+    end
   end
 
   # Reset this deck with 52 cards
@@ -76,20 +83,12 @@ class Deck
   end
 
   # Mix around the order of the cards in your deck
-  def shuffle # You can't use .shuffle!
+  def shuffle
     @deck.size.times do |i|
       j = rand(deck.size)
       @deck[i], @deck[j] = @deck[j], @deck[i]
     end
   end
-
-  # def check_array
-  #   if @deck[@current_index] == nil
-  #     @deck = @ph
-  #     @current_index = 0
-  #     @ph = []
-  #   end
-  # end
 
   def count_deck
     @deck.compact.count
@@ -100,8 +99,9 @@ class Deck
   end
 
   def empty?
-    @deck.compact.count == 0
+    @deck.compact.count == 0 && @ph.compact.count == 0
   end
+
 end
 
 class Player
@@ -145,9 +145,9 @@ class War
   end
 
   def pass_cards
-    card1 = @main_deck.remove_card
+    card1 = @main_deck.set_up_deck
     @player1.take_card(card1)
-    card2 = @main_deck.remove_card
+    card2 = @main_deck.set_up_deck
     @player2.take_card(card2)
   end
 
@@ -163,13 +163,17 @@ class War
 
       turns +=1
     end
+    "Number of Turns: {turns}"
+  end
 
-    if @player1.hand.ph.empty?
+  def winner
+    if @player1.hand.count_deck == 0 && @player1.hand.count_ph == 0
       "#{@player2.name} is the winner!"
+      @player2
     else
       "#{@player1.name} is the winner!"
+      @player1
     end
-    return "Number of Turns: {turns}"
   end
     # Then, have the computer play 100 games and determine the average number of turns it takes to win!
 end

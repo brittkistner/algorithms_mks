@@ -114,26 +114,32 @@ describe War do
   # end
 
   describe "#play_game" do
-    it "the winner will have 52 cards and the loser will have 0 cards" do
+    before do
       new_game = War.new("p1", "p2")
-
-      # binding.pry
-
+    end
+    xit "the winner will have 52 cards and the loser will have 0 cards" do
       new_game.play_game
 
-      # expect(winner).to be_a(Person)
-      #expect res to equal fixnum
-      # check for nil
-
-      if new_game.player1.has_cards? == false
-        expect(new_game.player2.hand.count_ph).to eq(52)
-        expect(new_game.player1.hand.count_deck).to eq(0)
+      # binding.pry
+      if @new_game.player1.hand.count_deck == 0 && @new_game.player1.hand.count_ph == 0
+        expect(@new_game.player2.hand.count_ph + @new_game.player2.hand.count_deck).to eq(52)
+        expect(@new_game.player1.hand.count_ph + @new_game.player1.hand.count_deck).to eq(0)
       else
-        expect(new_game.player1.hand.count_ph).to eq(52)
-        expect(new_game.player2.hand.count_deck).to eq(0)
+        expect(@new_game.player1.hand.count_ph + @new_game.player1.hand.count_deck).to eq(52)
+        expect(@new_game.player2.hand.count_ph + @new_game.player2.hand.count_deck).to eq(0)
       end
     end
-    xit 'will count the number of turns it took to win the game' do
+    xit "will return with the number of turns for the game" do
+      expect(@new_game.play_game).to be_a(String)
+      #how to check for the number of turns?
+    end
+  end
+
+  describe "#winner" do
+    xit "will return the winner of the game" do
+      new_game = War.new("p1", "p2")
+      new_game.play_game
+      expect(new_game.winner).to be_a(Person)
     end
   end
 end
