@@ -51,13 +51,13 @@ class Deck
   end
 
   # Remove the top card from your deck and return it
-  def set_up_deck #REWORK
-    card = @deck[@current_index]  #the first time around, this would be @deck[0]
-    @deck[@current_index] = nil #now the first element is nil
-    @current_index += 1 #increment the index by 1
-    check_array #Broken
-    card
-  end
+  # def set_up_deck
+  #   card = @deck[@current_index]  #the first time around, this would be @deck[0]
+  #   @deck[@current_index] = nil #now the first element is nil
+  #   @current_index += 1 #increment the index by 1
+  #   check_array #Broken
+  #   card
+  # end
 
   def remove_card
     card = @deck[@current_index]
@@ -83,22 +83,24 @@ class Deck
     end
   end
 
-  def check_array
-    if @deck[@current_index] == nil
-      @deck = @ph
-      @current_index = 0
-      @ph = []
-    end
-  end
+  # def check_array
+  #   if @deck[@current_index] == nil
+  #     @deck = @ph
+  #     @current_index = 0
+  #     @ph = []
+  #   end
+  # end
 
   def count_deck
-    @deck.count {|x| x!=nil}
-    # @deck.compact.count
+    @deck.compact.count
+  end
+
+  def count_ph
+    @ph.compact.count
   end
 
   def empty?
-    @deck.count {|x| x!=nil} == 0
-    # @deck.compact.count == 0
+    @deck.compact.count == 0
   end
 end
 
@@ -111,8 +113,7 @@ class Player
     @hand = Deck.new
   end
 
-  #naming? its a little confusing what give_card means without reading the rest of the code
-  def give_card(card)
+  def take_card(card)
     @hand.deck << card
   end
 
@@ -120,9 +121,9 @@ class Player
     !@hand.empty?
   end
 
-  # def play_card
-  #   @hand.remove_card
-  # end
+  def play_card
+    @hand.remove_card
+  end
 end
 
 
@@ -138,45 +139,39 @@ class War
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
 
-    pass_cards
+    52.times do
+      pass_cards
+    end
   end
 
   def pass_cards
-    while !@main_deck.empty?
-      card1 = @main_deck.set_up_deck #change
-      @player1.give_card(card1)
-      card2 = @main_deck.set_up_deck #change to set_up_deck
-      @player2.give_card(card2)
-    end
+    card1 = @main_deck.remove_card
+    @player1.take_card(card1)
+    card2 = @main_deck.remove_card
+    @player2.take_card(card2)
   end
 
   def play_game
     while @player1.has_cards? && @player2.has_cards?
-      # if @player1.hand.deck.count != 26 || @player2.hand.deck.count != 26
-      #   binding.pry
-      # end
-      #turns = 0
+      turns = 0
 
-      card1 = @player1.hand.remove_card #play_card
-      card2 = @player2.hand.remove_card
+      card1 = @player1.play_card
+      card2 = @player2.play_card
       result = WarAPI.play_turn(@player1, card1, @player2, card2)
       result[@player1].each { |c| @player1.hand.add_card(c) }
       result[@player2].each { |c| @player2.hand.add_card(c) }
-      # if hash[@player1].length == 2  Use @ because a player object was passed through
-      #   hand.add_card(hash[@player1][0])
-      #   hand.add_card(hash[@player1][1])
-      # else
-      #   hand.add_card(hash[@player1][0])
-      #   hand.add_card(hash[@player1][1])
-      # end
+
+      turns +=1
     end
 
-    if @player1.hand.empty?
+    if @player1.hand.ph.empty?
       "#{@player2.name} is the winner!"
     else
       "#{@player1.name} is the winner!"
     end
+    return "Number of Turns: {turns}"
   end
+    # Then, have the computer play 100 games and determine the average number of turns it takes to win!
 end
 
 

@@ -18,11 +18,19 @@ end
 
 describe Deck do
   describe '#initialize' do
-    it 'empty deck' do #WHAT??
-      new_deck = Deck.new
-      expect(new_deck.deck).to eq([])
+    before do
+      @new_deck = Deck.new
     end
-  # check ph and index
+    it 'deck is empty' do
+      expect(@new_deck.deck.length).to eq(0)
+    end
+    it 'has an empty placeholder deck' do
+      expect(@new_deck.ph.length).to eq(0)
+    end
+
+    it 'the current_index is set to 0' do
+      expect(@new_deck.current_index).to eq(0)
+    end
     it 'adds suits' do
       expect(Deck.suits).to eq([:spades, :diamonds, :clubs, :hearts])
     end
@@ -45,37 +53,30 @@ describe Deck do
       expect(deck1.deck.length).to eq(104)
     end
   end
-  describe 'remove_card and add_card' do
-    it 'adds card then removes card' do
-      deck1 = Deck.new
-      expect(deck1.deck.length).to eq(0)
-      deck1.add_card(3)
-      expect(deck1.ph.length).to eq(1) #can't include both add and remove, since add cards go to ph
-      deck1.remove_card
-      expect(deck1.count_deck).to eq(nil)
-    end
-  end
-  describe 'remove_card' do
-    it 'removes card from deck' do
+  describe '#remove_card and #add_card' do
+    it 'removes card from 52 card deck and adds card to placeholder deck' do
       deck1 = Deck.new
       deck1.create_52_card_deck
       expect(deck1.count_deck).to eq(52)
       deck1.remove_card
-      expect(deck1.count_deck).to eq(51) #can't include both add and remove, since add cards go to ph
+      expect(deck1.count_deck).to eq(51)
+
+      deck1.add_card(3)
+      expect(deck1.ph.length).to eq(1)
     end
   end
 
-  context 'switches to the placeholder deck' do
-    it 'checks if the index is zero' do
-      deck1 = Deck.new
-      deck1.create_52_card_deck
-      expect(deck1.current_index).to eq(0)
-      52.times do
-        deck1.set_up_deck
-      end
-      expect(deck1.current_index).to eq(0)
-    end
-  end
+  # context 'switches to the placeholder deck' do
+  #   xit 'checks if the index is zero' do
+  #     deck1 = Deck.new
+  #     deck1.create_52_card_deck
+  #     expect(deck1.current_index).to eq(0)
+  #     52.times do
+  #       deck1.set_up_deck
+  #     end
+  #     expect(deck1.current_index).to eq(0)
+  #   end
+  # end
 
   describe 'shuffle' do
     it 'returns a deck of the original size' do
@@ -89,42 +90,50 @@ end
 
 describe War do
   describe "#initialize" do
+    before do
+      @new_game = War.new("p1", "p2")
+    end
     it "War with two players" do
-      new_game = War.new("sky", "fawn")
-      expect(new_game.player1.name).to eq("sky")
-      expect(new_game.player2.name).to eq("fawn")
+      expect(@new_game.player1.name).to eq("p1")
+      expect(@new_game.player2.name).to eq("p2")
     end
 
-    it "with 26 cards in each player's deck" do
-      new_game = War.new("sky", "fawn")
-      expect(new_game.player1.hand.count_deck).to eq(26) #index = 0
-      expect(new_game.player2.hand.count_deck).to eq(26)
+    it "initializes with 26 cards in each player's deck" do
+      expect(@new_game.player1.hand.count_deck).to eq(26) #index = 0
+      expect(@new_game.player2.hand.count_deck).to eq(26)
     end
   end
 
-  describe "pass_cards" do
-    it "empties main deck and passes cards to all players" do
-      new_game = War.new("sky", "fawn")
-      new_game.pass_cards
-      expect(new_game.main_deck.count_deck).to eq(0)
-    end
-  end
+  # describe "pass_cards" do
+  #   it "empties main deck and passes cards to all players" do
+  #     new_game = War.new("p1", "p2")
 
-  describe "play_game" do
-    xit "the winner will have 52 cards and the loser will have 0 cards" do
-      new_game = War.new("sky", "fawn")
-      new_game.play_game
+  #     new_game.pass_cards
+  #     expect(new_game.main_deck.count_deck).to eq(0)
+  #   end
+  # end
+
+  describe "#play_game" do
+    it "the winner will have 52 cards and the loser will have 0 cards" do
+      new_game = War.new("p1", "p2")
+
       # binding.pry
+
+      new_game.play_game
+
       # expect(winner).to be_a(Person)
       #expect res to equal fixnum
       # check for nil
-      if new_game.player1.hand.empty?
-        expect(new_game.player2.hand.ph.count).to eq(52)
+
+      if new_game.player1.has_cards? == false
+        expect(new_game.player2.hand.count_ph).to eq(52)
         expect(new_game.player1.hand.count_deck).to eq(0)
       else
-        expect(new_game.player1.hand.ph.count).to eq(52)
+        expect(new_game.player1.hand.count_ph).to eq(52)
         expect(new_game.player2.hand.count_deck).to eq(0)
       end
+    end
+    xit 'will count the number of turns it took to win the game' do
     end
   end
 end
