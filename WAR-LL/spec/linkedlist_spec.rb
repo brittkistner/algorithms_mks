@@ -18,15 +18,15 @@ describe "Linked_List" do
   end
 
   describe '#add_last' do
-    it 'adds a new node to the end of the list' do
+    before do
       list1 = Linked_List.new
+    end
+    it 'adds a new node to the end of the list when theres no other node' do
       Linked_List.add_last(1)
       expect(Linked_List.last_node).to eq(nil)
-
     end
 
-    it "adds a new node to the end of the list when theres no other node" do
-      list1 = Linked_List.new
+    it "adds a new node to the end of the list when there'" do
 
     end
   end
