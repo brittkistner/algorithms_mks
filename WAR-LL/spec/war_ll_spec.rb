@@ -25,12 +25,12 @@ describe "Deck" do
     end
   end
 
-  describe '#create_52_card_deck' do
+  describe '#create_52_card_deck_and_shuffle' do
     before do
       @deck1 = Deck.new
     end
-    it 'adds 52 cards to the deck' do
-      @deck1.create_52_card_deck
+    it 'adds 52 cards to the deck and shuffles the deck' do
+      @deck1.create_52_card_deck_and_shuffle
       expect(@deck1.count_deck).to eq(52)
     end
   end
@@ -50,14 +50,14 @@ describe "Deck" do
     end
   end
 
-  describe 'shuffle' do
-    it 'returns a deck of the original size' do
-      deck1 = Deck.new
-      deck1.create_52_card_deck
-      deck1.shuffle
-      expect(deck1.count_deck).to eq(52)
-    end
-  end
+  # describe 'shuffle' do
+  #   xit 'returns a deck of the original size' do
+  #     deck1 = Deck.new
+  #     deck1.create_52_card_deck
+  #     deck1.shuffle
+  #     expect(deck1.count_deck).to eq(52)
+  #   end
+  # end
 end
 
 describe 'Player' do
@@ -116,7 +116,7 @@ describe "War" do
     before do
       @new_game = War.new("p1", "p2")
     end
-    xit "the winner will have 52 cards and the loser will have 0 cards" do
+    it "the winner will have 52 cards and the loser will have 0 cards" do
       @new_game.play_game
 
       if @new_game.player1.hand.count_deck == 0
@@ -133,7 +133,7 @@ describe "War" do
       expect(@new_game.turns).to eq(15)
     end
 
-    xit "computer runs the game 100 times and returns with the average number of turns" do
+    it "computer runs the game 100 times and returns with the average number of turns" do
       num_turns = 0
 
       100.times do
@@ -145,7 +145,7 @@ describe "War" do
   end
 
   describe "#winner" do
-    it "will return the winner of the game" do
+    xit "will return the winner of the game" do
       new_game = War.new("p1", "p2")
 
       if new_game.player1.hand.count_deck == 0

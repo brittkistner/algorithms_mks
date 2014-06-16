@@ -37,12 +37,15 @@ class Deck
     @deck = Linked_List.new
   end
 
-  def create_52_card_deck
+  def create_52_card_deck_and_shuffle
+    temp =[]
     Deck.suits.each do |suit|
       Deck.values.each do |value|
-        @deck.add_last(Card.new(value,suit))
+        temp << Card.new(value, suit)
       end
     end
+
+    temp.each {|x| @deck.add_last(x)}
   end
 
   def self.suits
@@ -60,24 +63,7 @@ class Deck
 
   # Remove the top card from your deck and return it
   def remove_card
-    @deck.remove_first
-  end
-
-
-  # Mix around the order of the cards in your deck
-  def shuffle
-    temp = []
-
-    while @deck.count != 0 do
-      temp << @deck.remove_first.value
-    end
-
-    temp.size.times do |i|
-      j = rand(temp.size)
-      temp[i], temp[j] = temp[j], temp[i]
-    end
-
-    temp.each {|x| @deck.add_last(x)}
+    @deck.remove_first.value
   end
 
   def count_deck
@@ -120,8 +106,8 @@ class War
 
   def initialize(player1, player2)
     @main_deck = Deck.new
-    @main_deck.create_52_card_deck
-    @main_deck.shuffle
+    @main_deck.create_52_card_deck_and_shuffle
+    # @main_deck.shuffle
 
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
@@ -167,9 +153,9 @@ class WarAPI
   # This method will take a card from each player and
   # return a hash with the cards that each player should receive
   def self.play_turn(player1, card1, player2, card2)
-    if card1.value.value > card2.value.value
+    if card1.value > card2.value
       {player1 => [card1, card2], player2 => []}
-    elsif card2.value.value > card1.value.value
+    elsif card2.value > card1.value
       {player1 => [], player2 => [card2, card1]}
     elsif rand(100).even?
       {player1 => [], player2 => [card2, card1]}
