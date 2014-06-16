@@ -130,6 +130,16 @@ describe "War" do
       allow(@new_game).to receive(:turns).and_return(15)
       expect(@new_game.turns).to eq(15)
     end
+
+    xit "will return with the number of turns for the game" do
+      num_turns = 0
+
+      100.times do
+      num_turns += @new_game.play_game
+      end
+
+      num_turns/100
+    end
   end
 
   describe "#winner" do

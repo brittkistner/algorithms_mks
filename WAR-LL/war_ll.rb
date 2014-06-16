@@ -118,7 +118,7 @@ end
 
 class War
 
-  attr_accessor :player1, :player2, :main_deck, :turns
+  attr_accessor :player1, :player2, :main_deck
 
   def initialize(player1, player2)
     @main_deck = Deck.new
@@ -127,8 +127,6 @@ class War
 
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
-
-    @turns = 0
 
     #think about while loop for times
 
@@ -145,6 +143,7 @@ class War
   end
 
   def play_game
+    turns = 0
     while @player1.has_cards? && @player2.has_cards?
 
       card1 = @player1.play_card
@@ -152,10 +151,8 @@ class War
       result = WarAPI.play_turn(@player1, card1, @player2, card2)
       result[@player1].each { |c| @player1.hand.add_card(c) }
       result[@player2].each { |c| @player2.hand.add_card(c) }
-
-      @turns +=1
     end
-    @turns
+    turns
   end
 
   def winner
