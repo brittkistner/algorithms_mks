@@ -34,7 +34,7 @@ class Linked_List
 
   def swap #take one node and move behind another node (or in front - one or the other)
     #think about how index relates to a linked list
-    if @first_node = nil
+    if @first_node == nil
       nil
     elsif @first_node == @last_node
       @first_node
@@ -45,8 +45,8 @@ class Linked_List
       old_first.next_node = nil
       old_second.next_node = old_first
 
-      # @first_node = old_second
-      # @last_node = old_first
+      @first_node = old_second
+      @last_node = old_first
       true
     end
   end

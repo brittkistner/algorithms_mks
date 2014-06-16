@@ -1,13 +1,10 @@
-require_relative 'linked_list.rb'
-
-
 class Card
   # Rank is the rank of the card, 2-10, J, Q, K, A
   # Value is the numeric value of the card, so J = 11, A = 14
   # Suit is the suit of the card, Spades, Diamonds, Clubs or Hearts
 
   attr_reader :value, :suit, :rank
-  def initialize(value, suit)
+  def initialize(value, suit) #consider adding the rank back in
     @value = value
     @suit = suit
     @rank = make_rank(value)
@@ -30,21 +27,13 @@ class Card
 end
 
 class Deck
-
-  attr_accessor :deck
+  attr_accessor :deck, :current_index
+  attr_reader :ph
 
   def initialize
-    @deck = Linked_List.new
-
-    #don't initialize with 52 cards because this will mess up player deck
-  end
-
-  def create_52_card_deck
-    Deck.suits.each do |suit|
-      Deck.values.each do |value|
-        @deck.add_last(Card.new(value,suit)) #changed this
-      end
-    end
+    @deck = []
+    @ph = []
+    @current_index = 0
   end
 
   def self.suits
@@ -55,45 +44,65 @@ class Deck
     [2,3,4,5,6,7,8,9,10,11,12,13,14]
   end
 
-  # Given a card,insert it on the bottom your deck
+  def set_up_deck
+    card = @deck[@current_index]  #the first time around, this would be @deck[0]
+    @deck[@current_index] = nil #now the first element is nil
+    @current_index += 1 #increment the index by 1
+    card
+  end
+
+  # Given a card, insert it on the bottom your deck
   def add_card(card)
-    @deck.add_last(card)
+    @ph << card
   end
 
   # Remove the top card from your deck and return it
   def remove_card
-    @deck.remove_first
+    card = @deck[@current_index]
+    @deck[@current_index] = nil
+    @current_index += 1
+    check_array #when to switch to ph deck
+    card
   end
 
-
-  # Mix around the order of the cards in your deck
-  def shuffle
-    @deck.swap
-    temp = []
-    #remove cards into temp
-
-    temp.size.times do |i|
-    j = rand(temp.size)
-    temp[i], temp[j] = temp[j], temp[i]
-    #add them back to list
+  def check_array
+    if @deck[@current_index] == nil
+      @deck = @ph
+      @current_index = 0
+      @ph = []
     end
   end
 
-  #create an empty array under shuffle method temp = [], deal all cards out of linked list into the array, then run same exact shuffle method becuase it will be an array.  then take add all  ards back to link list
-  # deal cards into array
-  # shuffle array
-  # take all cards out of array and add back into linked list
+  # Reset this deck with 52 cards
+  def create_52_card_deck
+    Deck.suits.each do |suit|
+      Deck.values.each do |value|
+        @deck << Card.new(value, suit)
+      end
+    end
+  end
+
+  # Mix around the order of the cards in your deck
+  def shuffle
+    @deck.size.times do |i|
+      j = rand(deck.size)
+      @deck[i], @deck[j] = @deck[j], @deck[i]
+    end
+  end
 
   def count_deck
-    @deck.count
+    @deck.compact.count
+  end
+
+  def count_ph
+    @ph.compact.count
   end
 
   def empty?
-    @deck.count == 0
+    @deck.compact.count == 0 && @ph.compact.count == 0
   end
+
 end
-
-
 
 class Player
   attr_reader :name
@@ -104,15 +113,15 @@ class Player
     @hand = Deck.new
   end
 
-  def take_card(card) #take a card from the deck during set up
-    @hand.add_card(card)
+  def take_card(card)
+    @hand.deck << card
   end
 
-  def has_cards? #checks if the deck is empty
+  def has_cards?
     !@hand.empty?
   end
 
-  def play_card #takes a card from deck and returns the value of the card
+  def play_card
     @hand.remove_card
   end
 end
@@ -130,7 +139,7 @@ class War
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
 
-    @turns = 0
+    # @turns = 0
 
     52.times do
       pass_cards
@@ -138,13 +147,15 @@ class War
   end
 
   def pass_cards
-    card1 = @main_deck.remove_card #main_deck is passing out cards
+    card1 = @main_deck.set_up_deck
     @player1.take_card(card1)
-    card2 = @main_deck.remove_card
+    card2 = @main_deck.set_up_deck
     @player2.take_card(card2)
   end
 
   def play_game
+    turns = 0
+
     while @player1.has_cards? && @player2.has_cards?
 
       card1 = @player1.play_card
@@ -153,13 +164,13 @@ class War
       result[@player1].each { |c| @player1.hand.add_card(c) }
       result[@player2].each { |c| @player2.hand.add_card(c) }
 
-      @turns +=1
+      turns +=1
     end
-    @turns
+    turns
   end
 
   def winner
-    if @player1.hand.count_deck == 0
+    if @player1.hand.count_deck == 0 && @player1.hand.count_ph == 0
       "#{@player2.name} is the winner!"
     else
       "#{@player1.name} is the winner!"
@@ -184,4 +195,7 @@ class WarAPI
     end
   end
 end
+
+new_game = War.new("p1","p2")
+new_game.play_game
 
