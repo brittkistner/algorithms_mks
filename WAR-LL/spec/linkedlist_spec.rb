@@ -4,12 +4,12 @@ require 'pry-debugger'
 require_relative '../linked_list.rb'
 
 describe "Linked_List" do
-  xit "exists" do
+  it "exists" do
     expect(Linked_List).to be_a(Class)
   end
 
   describe '#initialize' do
-    xit 'instantiates a linked list with a nil first_node and last_node' do
+    it 'instantiates a linked list with a nil first_node and last_node' do
       list1 = Linked_List.new
       expect(list1.first_node).to eq(nil)
       expect(list1.last_node).to eq(nil)
@@ -21,7 +21,7 @@ describe "Linked_List" do
     before do
       @list1 = Linked_List.new
     end
-    xit 'adds a new node to an empty list' do
+    it 'adds a new node to an empty list' do
       expect(@list1.count).to eq(0)
 
       expect(@list1.add_last(1)).to eq(true)
@@ -29,7 +29,7 @@ describe "Linked_List" do
       expect(@list1.last_node.value).to eq(1)
       expect(@list1.count).to eq(1)
     end
-    xit 'adds a new node to the end of a list with other nodes' do
+    it 'adds a new node to the end of a list with other nodes' do
       @list1.add_last(1)
       @list1.add_last(2)
 
@@ -43,11 +43,11 @@ describe "Linked_List" do
     before do
       @list1 = Linked_List.new
     end
-    xit "checks whether there is a first_node to remove" do
+    it "checks whether there is a first_node to remove" do
       expect(@list1.remove_first).to eq(nil)
     end
 
-    xit "removes the first_node from the list" do
+    it "removes the first_node from the list" do
       @list1.add_last(1)
       @list1.add_last(2)
       expect(@list1.count).to eq(2)
@@ -59,25 +59,10 @@ describe "Linked_List" do
     end
   end
 
-  describe '#swap' do
-    xit "swaps the first_node with the next_node" do
-      list1 = Linked_List.new
-      list1.add_last(1)
-      list1.add_last(2)
-      expect(list1.count).to eq(2)
-      expect(list1.first_node.value).to eq(1)
-
-      binding.pry
-
-      expect(list1.swap).to eq(true)
-      # expect(list1.count).to eq(2)
-      # expect(list1.first_node.value).to eq(2)
-    end
-  end
 end
 
 describe "Linked_List::Node" do
-  xit "exists" do
+  it "exists" do
     expect(Linked_List::Node).to be_a(Class)
   end
 
@@ -85,11 +70,11 @@ describe "Linked_List::Node" do
     before do
       @node1 = Linked_List::Node.new(1,nil)
     end
-    xit 'initializes a node with a value and a pointer to next_node' do
+    it 'initializes a node with a value and a pointer to next_node' do
       expect(@node1.value).to eq(1)
       expect(@node1.next_node).to eq(nil)
     end
-    xit 'can point to the next_node' do
+    it 'can point to the next_node' do
       node2 = Linked_List::Node.new(2, nil)
 
       @node1.next_node = node2

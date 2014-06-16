@@ -68,21 +68,19 @@ class Deck
 
   # Mix around the order of the cards in your deck
   def shuffle
-    @deck.swap
     temp = []
-    #remove cards into temp
+    # while loop
+    52.times do #remove cards into temp
+      temp << @deck.remove_first
+    end
 
     temp.size.times do |i|
-    j = rand(temp.size)
-    temp[i], temp[j] = temp[j], temp[i]
-    #add them back to list
+      j = rand(temp.size)
+      temp[i], temp[j] = temp[j], temp[i]
     end
-  end
 
-  #create an empty array under shuffle method temp = [], deal all cards out of linked list into the array, then run same exact shuffle method becuase it will be an array.  then take add all  ards back to link list
-  # deal cards into array
-  # shuffle array
-  # take all cards out of array and add back into linked list
+    temp.each {|x| @deck.add_last(x)}
+  end
 
   def count_deck
     @deck.count
@@ -132,7 +130,9 @@ class War
 
     @turns = 0
 
-    52.times do
+    #think about while loop for times
+
+    26.times do
       pass_cards
     end
   end
@@ -184,4 +184,3 @@ class WarAPI
     end
   end
 end
-

@@ -29,7 +29,7 @@ describe "Deck" do
     before do
       @deck1 = Deck.new
     end
-    xit 'adds 52 cards to the deck' do
+    it 'adds 52 cards to the deck' do
       @deck1.create_52_card_deck
       expect(@deck1.count_deck).to eq(52)
     end
@@ -52,10 +52,10 @@ describe "Deck" do
 
   describe 'shuffle' do
     xit 'returns a deck of the original size' do
-      # deck1 = Deck.new
-      # deck1.create_52_card_deck
-      # deck1.shuffle
-      # expect(deck1.deck.size).to eq(52)
+      deck1 = Deck.new
+      deck1.create_52_card_deck
+      deck1.shuffle
+      expect(deck1.deck.size).to eq(52)
     end
   end
 end
@@ -69,23 +69,27 @@ describe 'Player' do
     end
   end
 
-  # describe "#take_card and checks if #has_cards" do
-  #   player1 = Player.new("p1")
-  #   expect(player1.has_cards?).to eq(false)
+  describe "#take_card and #has_cards" do
+    it "takes a card and checks if there are cards left" do
+      player1 = Player.new("p1")
+      expect(player1.has_cards?).to eq(false)
 
-  #   player1.take_card(1)
-  #   expect(player1.hand.count_deck).to eq(1)
+      player1.take_card(1)
+      expect(player1.hand.count_deck).to eq(1)
 
-  #   expect(player1.has_cards?).to eq(true)
-  # end
+      expect(player1.has_cards?).to eq(true)
+    end
+  end
 
-  # describe "#play_card" do
-  #   player1 = Player.new("p1")
+  describe "#play_card" do
+    it "plays a card" do
+      player1 = Player.new("p1")
 
-  #   player1.take_card(1)
+      player1.take_card(1)
 
-  #   expect(player1.play_card).to eq(1)
-  # end
+      expect(player1.play_card).to be_a(Linked_List::Node)
+    end
+  end
 end
 
 describe "War" do
@@ -93,25 +97,18 @@ describe "War" do
     before do
       @new_game = War.new("p1", "p2")
     end
-    xit "War with two players" do
+    it "War with two players" do
       expect(@new_game.player1.name).to eq("p1")
       expect(@new_game.player2.name).to eq("p2")
     end
 
-    xit "initializes with 26 cards in each player's deck" do
+    it "initializes with 26 cards in each player's deck" do
       expect(@new_game.player1.hand.count_deck).to eq(26)
       expect(@new_game.player2.hand.count_deck).to eq(26)
     end
   end
 
-  # describe "pass_cards" do
-  #   it "empties main deck and passes cards to all players" do
-  #     new_game = War.new("p1", "p2")
-
-  #     new_game.pass_cards
-  #     expect(new_game.main_deck.count_deck).to eq(0)
-  #   end
-  # end
+  #pass_cards method
 
   describe "#play_game" do
     before do
@@ -129,14 +126,14 @@ describe "War" do
       end
     end
 
-    xit "will return with the number of turns for the game" do
+    it "will return with the number of turns for the game" do
       allow(@new_game).to receive(:turns).and_return(15)
       expect(@new_game.turns).to eq(15)
     end
   end
 
   describe "#winner" do
-    xit "will return the winner of the game" do
+    it "will return the winner of the game" do
       new_game = War.new("p1", "p2")
 
       if new_game.player1.hand.count_deck == 0

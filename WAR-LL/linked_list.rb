@@ -32,25 +32,6 @@ class Linked_List
     end
   end
 
-  def swap #take one node and move behind another node (or in front - one or the other)
-    #think about how index relates to a linked list
-    if @first_node == nil
-      nil
-    elsif @first_node == @last_node
-      @first_node
-    else
-      old_first = @first_node
-      old_second = @first_node.next_node
-
-      old_first.next_node = nil
-      old_second.next_node = old_first
-
-      @first_node = old_second
-      @last_node = old_first
-      true
-    end
-  end
-
   class Node
     attr_accessor :value, :next_node
 
