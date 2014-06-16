@@ -85,9 +85,13 @@ describe 'Player' do
     it "plays a card" do
       player1 = Player.new("p1")
 
-      player1.take_card(1)
+      expect(player1.hand.count_deck).to eq(0)
 
-      expect(player1.play_card).to be_a(Linked_List::Node)
+      player1.take_card(1)
+      expect(player1.hand.count_deck).to eq(1)
+
+      player1.play_card
+      expect(player1.hand.count_deck).to eq(0)
     end
   end
 end
@@ -107,8 +111,6 @@ describe "War" do
       expect(@new_game.player2.hand.count_deck).to eq(26)
     end
   end
-
-  #pass_cards method
 
   describe "#play_game" do
     before do
@@ -131,7 +133,7 @@ describe "War" do
       expect(@new_game.turns).to eq(15)
     end
 
-    xit "will return with the number of turns for the game" do
+    xit "computer runs the game 100 times and returns with the average number of turns" do
       num_turns = 0
 
       100.times do

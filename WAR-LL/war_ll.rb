@@ -35,14 +35,12 @@ class Deck
 
   def initialize
     @deck = Linked_List.new
-
-    #don't initialize with 52 cards because this will mess up player deck
   end
 
   def create_52_card_deck
     Deck.suits.each do |suit|
       Deck.values.each do |value|
-        @deck.add_last(Card.new(value,suit)) #changed this
+        @deck.add_last(Card.new(value,suit))
       end
     end
   end
@@ -69,9 +67,9 @@ class Deck
   # Mix around the order of the cards in your deck
   def shuffle
     temp = []
-    # while loop
-    52.times do #remove cards into temp
-      temp << @deck.remove_first
+
+    while @deck.count != 0 do
+      temp << @deck.remove_first.value
     end
 
     temp.size.times do |i|
@@ -162,7 +160,6 @@ class War
       "#{@player1.name} is the winner!"
     end
   end
-    # Then, have the computer play 100 games and determine the average number of turns it takes to win!
 end
 
 
@@ -170,9 +167,9 @@ class WarAPI
   # This method will take a card from each player and
   # return a hash with the cards that each player should receive
   def self.play_turn(player1, card1, player2, card2)
-    if card1.value > card2.value
+    if card1.value.value > card2.value.value
       {player1 => [card1, card2], player2 => []}
-    elsif card2.value > card1.value
+    elsif card2.value.value > card1.value.value
       {player1 => [], player2 => [card2, card1]}
     elsif rand(100).even?
       {player1 => [], player2 => [card2, card1]}
