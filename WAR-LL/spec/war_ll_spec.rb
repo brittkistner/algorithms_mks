@@ -51,11 +51,11 @@ describe "Deck" do
   end
 
   describe 'shuffle' do
-    xit 'returns a deck of the original size' do
+    it 'returns a deck of the original size' do
       deck1 = Deck.new
       deck1.create_52_card_deck
       deck1.shuffle
-      expect(deck1.deck.size).to eq(52)
+      expect(deck1.count_deck).to eq(52)
     end
   end
 end
