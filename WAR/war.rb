@@ -129,7 +129,7 @@ end
 
 class War
 
-  attr_accessor :player1, :player2, :main_deck, :turns
+  attr_accessor :player1, :player2, :main_deck
 
   def initialize(player1, player2)
     @main_deck = Deck.new
@@ -138,8 +138,6 @@ class War
 
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
-
-    @turns = 0
 
     52.times do
       pass_cards
@@ -154,6 +152,8 @@ class War
   end
 
   def play_game
+    turns = 0
+
     while @player1.has_cards? && @player2.has_cards?
 
       card1 = @player1.play_card
@@ -162,9 +162,10 @@ class War
       result[@player1].each { |c| @player1.hand.add_card(c) }
       result[@player2].each { |c| @player2.hand.add_card(c) }
 
-      @turns +=1
+      turns +=1
     end
-    @turns
+
+    turns
   end
 
   def winner
@@ -174,7 +175,6 @@ class War
       "#{@player1.name} is the winner!"
     end
   end
-    # Then, have the computer play 100 games and determine the average number of turns it takes to win!
 end
 
 
@@ -193,4 +193,7 @@ class WarAPI
     end
   end
 end
+
+# new_game = War.new("p1","p2")
+# new_game.play_game
 

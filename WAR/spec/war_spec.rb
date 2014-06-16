@@ -3,9 +3,7 @@ require 'rspec'
 require 'pry-debugger'
 require_relative '../war.rb'
 
-# add let statement before each
-
-describe Card do
+describe "Card" do
   describe '#initialize' do
     it 'checks the value, suit and rank of a card' do
       card = Card.new(11, :diamonds)
@@ -16,7 +14,7 @@ describe Card do
   end
 end
 
-describe Deck do
+describe "Deck" do
   describe '#initialize' do
     before do
       @new_deck = Deck.new
@@ -88,7 +86,7 @@ describe Deck do
   end
 end
 
-describe War do
+describe "War" do
   describe "#initialize" do
     before do
       @new_game = War.new("p1", "p2")
@@ -99,7 +97,7 @@ describe War do
     end
 
     it "initializes with 26 cards in each player's deck" do
-      expect(@new_game.player1.hand.count_deck).to eq(26) #index = 0
+      expect(@new_game.player1.hand.count_deck).to eq(26)
       expect(@new_game.player2.hand.count_deck).to eq(26)
     end
   end
@@ -120,8 +118,6 @@ describe War do
     it "the winner will have 52 cards and the loser will have 0 cards" do
       @new_game.play_game
 
-      # binding.pry
-
       if @new_game.player1.hand.count_deck == 0 && @new_game.player1.hand.count_ph == 0
         expect(@new_game.player2.hand.count_ph + @new_game.player2.hand.count_deck).to eq(52)
         expect(@new_game.player1.hand.count_ph + @new_game.player1.hand.count_deck).to eq(0)
@@ -135,11 +131,23 @@ describe War do
       allow(@new_game).to receive(:turns).and_return(15)
       expect(@new_game.turns).to eq(15)
     end
+
+    it "will return with the number of turns for the game" do
+      num_turns = 0
+
+      100.times do
+      num_turns += @new_game.play_game
+      end
+
+      num_turns/100
+    end
   end
 
   describe "#winner" do
     it "will return the winner of the game" do
       new_game = War.new("p1", "p2")
+
+      new_game.play_game
 
       if new_game.player1.hand.count_deck == 0 && new_game.player1.hand.count_ph == 0
         expect(new_game.winner).to eq("p2 is the winner!")
