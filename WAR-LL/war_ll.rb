@@ -107,14 +107,12 @@ class War
   def initialize(player1, player2)
     @main_deck = Deck.new
     @main_deck.create_52_card_deck_and_shuffle
-    # @main_deck.shuffle
 
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
 
-    #think about while loop for times
-
-    26.times do
+    while @main_deck.empty? != true do
+    # 26.times do
       pass_cards
     end
   end
